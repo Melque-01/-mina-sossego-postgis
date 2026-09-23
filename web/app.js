@@ -120,7 +120,12 @@ async function recarregar() {
         window._mineLabel.onAdd = () => { const d = L.DomUtil.create('div'); d.id='mine-year-label'; d.className='bg-dark text-light border border-danger px-2 py-1 rounded small shadow'; return d; };
         window._mineLabel.addTo(mapa);
       }
-      document.getElementById('mine-year-label').innerHTML = '<b style="color:#ff3b30">⬢ Mina ' + lbl + '</b>';
+      const el = document.getElementById('mine-year-label');
+      el.textContent = '';
+      const b = document.createElement('b');
+      b.style.color = '#ff3b30';
+      b.textContent = `⬢ Mina ${lbl}`;
+      el.appendChild(b);
     }
     // % do buffer
     let denom = null;
@@ -179,11 +184,12 @@ function interpreta() {
   const past5 = SERIE.filter(s => s.raio_km === 5 && s.classe === 'pastagem').reduce((t, s) => t + s.ha, 0);
   const min1 = SERIE.filter(s => s.raio_km === 1 && s.classe === 'mineracao').reduce((t, s) => t + s.ha, 0);
   const cresc5 = tot(5, a1) - tot(5, a0);
-  document.getElementById('texto-interp').innerHTML =
-    `Entre <b>${a0}</b> e <b>${a1}</b> o desmate no buffer 5km cresceu <b>${cresc5.toFixed(1)} ha</b>. ` +
-    `Pastagem soma <b>${past5.toFixed(1)} ha</b> no 5km contra <b>${min1.toFixed(1)} ha</b> de mineração no 1km. ` +
-    `Leitura: há perda florestal associada à mina (cava/pilha no 1km), mas o vetor dominante no entorno é agropecuário ` +
-    `— coerente com Canaã dos Carajás. Defender 5km como "entorno funcional" e 1km como "impacto direto".`;
+  const interp = document.getElementById('texto-interp');
+  interp.textContent = '';
+  const mkB = (t) => { const e = document.createElement('b'); e.textContent = t; return e; };
+  interp.append('Entre ', mkB(String(a0)), ` e `, mkB(String(a1)), ` o desmate no buffer 5km cresceu `, mkB(`${cresc5.toFixed(1)} ha`), '. ');
+  interp.append('Pastagem soma ', mkB(`${past5.toFixed(1)} ha`), ' no 5km contra ', mkB(`${min1.toFixed(1)} ha`), ' de mineração no 1km. ');
+  interp.append('Leitura: há perda florestal associada à mina (cava/pilha no 1km), mas o vetor dominante no entorno é agropecuário — coerente com Canaã dos Carajás. Defender 5km como "entorno funcional" e 1km como "impacto direto".');
 }
 
 base();
