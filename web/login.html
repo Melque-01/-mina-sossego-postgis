@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Login — Sossego Desmatamento</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="estilo.css">
+</head>
+<body class="login-fundo">
+  <!-- decor -->
+  <div class="login-orb orb-1"></div>
+  <div class="login-orb orb-2"></div>
+  <div class="login-orb orb-3"></div>
+  <div class="login-grid"></div>
+
+  <div class="container login-wrapper">
+    <div class="login-shell shadow-lg">
+      <div class="row g-0 h-100">
+        <!-- BRANDING -->
+        <div class="col-lg-5 login-brand">
+          <div class="brand-top">
+            <span class="brand-badge"><i class="bi bi-shield-lock"></i> Acesso restrito</span>
+            <div class="brand-logo">
+              <i class="bi bi-tree-fill"></i>
+            </div>
+            <h1>Mapeamento do<br>Desmatamento</h1>
+            <p class="brand-sub">Mina do Sossego &middot; Canaã dos Carajás &mdash; Pará</p>
+            <p class="brand-desc">Plataforma geoespacial para monitoramento da cobertura vegetal no entorno da mina. Visualize manchas, compare anos e gere evidências em mapa.</p>
+          </div>
+
+          <ul class="brand-features">
+            <li><span class="feat-icon"><i class="bi bi-geo-alt-fill"></i></span><div><strong>Mapa interativo</strong><span>Rua &bull; Satélite &bull; Buffers 1/5/10 km</span></div></li>
+            <li><span class="feat-icon"><i class="bi bi-layers-fill"></i></span><div><strong>2008 &middot; 2015 &middot; 2023</strong><span>Mineração, pastagem e outros usos</span></div></li>
+            <li><span class="feat-icon"><i class="bi bi-graph-up-arrow"></i></span><div><strong>KPIs &amp; gráficos</strong><span>Área (ha), % do entorno e série temporal</span></div></li>
+          </ul>
+
+          <div class="brand-footer">
+            <span><i class="bi bi-globe-americas"></i> WGS 84 &middot; Leaflet + PostGIS</span>
+            <span class="dot"></span>
+            <span>Uso autorizado</span>
+          </div>
+        </div>
+
+        <!-- FORM -->
+        <div class="col-lg-7 login-form-panel">
+          <div class="login-form-inner">
+            <!-- mobile brand header -->
+            <div class="d-lg-none text-center mb-4">
+              <div class="mobile-logo"><i class="bi bi-tree-fill"></i></div>
+              <div class="small text-uppercase fw-semibold tracking-widest text-success">Mina do Sossego</div>
+              <h5 class="fw-bold mb-1">Mapeamento do Desmatamento</h5>
+            </div>
+
+            <div class="form-header">
+              <h2>Acesse a plataforma</h2>
+              <p>Entre com suas credenciais para visualizar o mapa e os indicadores.</p>
+            </div>
+
+            <div id="erro" class="alert alert-danger d-none align-items-center gap-2 login-alert" role="alert">
+              <i class="bi bi-exclamation-triangle-fill flex-shrink-0"></i>
+              <span id="erro-texto"></span>
+            </div>
+
+            <form onsubmit="event.preventDefault(); entrar();" novalidate>
+              <div class="mb-3">
+                <label class="form-label login-label" for="login">Usuário</label>
+                <div class="input-group login-input-group">
+                  <span class="input-group-text"><i class="bi bi-person"></i></span>
+                  <input id="login" class="form-control" placeholder="ex: analista.sossego" autocomplete="username" autofocus>
+                </div>
+              </div>
+
+              <div class="mb-2">
+                <div class="d-flex justify-content-between align-items-center">
+                  <label class="form-label login-label mb-1" for="senha">Senha</label>
+                  <span class="small text-muted" style="font-size:.72rem"><i class="bi bi-lock me-1"></i>conexão segura</span>
+                </div>
+                <div class="input-group login-input-group">
+                  <span class="input-group-text"><i class="bi bi-key"></i></span>
+                  <input id="senha" type="password" class="form-control" placeholder="••••••••" autocomplete="current-password">
+                  <button class="btn btn-outline-secondary" type="button" id="btn-eye" onclick="toggleSenha()" tabindex="-1" aria-label="Mostrar senha">
+                    <i id="eye-icon" class="bi bi-eye"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div class="d-flex justify-content-between align-items-center my-3 login-options">
+                <label class="form-check mb-0">
+                  <input class="form-check-input" type="checkbox" id="lembrar">
+                  <span class="form-check-label small">Lembrar usuário</span>
+                </label>
+                <a href="#" class="small text-decoration-none link-success fw-medium" onclick="event.preventDefault(); toastInfo()">Esqueceu a senha?</a>
+              </div>
+
+              <button id="btn-entrar" class="btn btn-login w-100" type="submit">
+                <span class="btn-label"><i class="bi bi-box-arrow-in-right me-2"></i>Entrar</span>
+                <span class="btn-loading d-none"><span class="spinner-border spinner-border-sm me-2" role="status"></span>Entrando…</span>
+              </button>
+
+              <div class="login-divider"><span>ou</span></div>
+
+              <div class="login-help">
+                <i class="bi bi-info-circle"></i>
+                <span>Credenciais fornecidas pela equipe de geoprocessamento. Em caso de bloqueio, contate o administrador do sistema.</span>
+              </div>
+            </form>
+
+            <div class="login-foot">
+              <span>© 2023–2026 Sossego Geo &middot; Dados para fins de monitoramento ambiental</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="login-caption text-center">
+      <i class="bi bi-layers-half me-1"></i> Buffers de 1 km · 5 km · 10 km &nbsp;|&nbsp; Projeção SIRGAS 2000
+    </div>
+  </div>
+
+<script>
+if (localStorage.getItem('token')) location.href = 'index.html';
+
+// lembrar usuário
+const saved = localStorage.getItem('login_saved');
+if (saved) document.getElementById('login').value = saved;
+
+function toggleSenha(){
+  const i = document.getElementById('senha');
+  const icon = document.getElementById('eye-icon');
+  const isPwd = i.type === 'password';
+  i.type = isPwd ? 'text' : 'password';
+  icon.className = isPwd ? 'bi bi-eye-slash' : 'bi bi-eye';
+}
+
+function setLoading(v){
+  const btn = document.getElementById('btn-entrar');
+  btn.disabled = v;
+  btn.querySelector('.btn-label').classList.toggle('d-none', v);
+  btn.querySelector('.btn-loading').classList.toggle('d-none', !v);
+}
+
+function toastInfo(){
+  const e = document.getElementById('erro');
+  const t = document.getElementById('erro-texto');
+  e.classList.remove('d-none','alert-danger');
+  e.classList.add('alert-warning','d-flex');
+  t.textContent = 'Solicite a redefinição ao administrador do sistema (usuário com perfil admin).';
+}
+
+async function entrar() {
+  const erro = document.getElementById('erro');
+  const erroTexto = document.getElementById('erro-texto');
+  erro.classList.add('d-none');
+  erro.classList.remove('d-flex');
+  const login = document.getElementById('login').value.trim();
+  const senha = document.getElementById('senha').value;
+  if(!login || !senha){
+    erroTexto.textContent = 'Preencha usuário e senha.';
+    erro.classList.remove('d-none','alert-warning');
+    erro.classList.add('alert-danger','d-flex');
+    return;
+  }
+  setLoading(true);
+  try {
+    const r = await fetch('/api/login', {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({login, senha})
+    });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.erro || 'Falha no login');
+    if (document.getElementById('lembrar').checked) localStorage.setItem('login_saved', login);
+    else localStorage.removeItem('login_saved');
+    localStorage.setItem('token', d.token);
+    localStorage.setItem('usuario', d.login + ' (' + d.perfil + ')');
+    location.href = 'index.html';
+  } catch (e) {
+    erroTexto.textContent = e.message;
+    erro.classList.remove('d-none','alert-warning');
+    erro.classList.add('alert-danger','d-flex');
+    erro.classList.remove('d-none');
+  } finally { setLoading(false); }
+}
+document.getElementById('senha').addEventListener('keydown', e => { if (e.key === 'Enter') entrar(); });
+document.getElementById('login').addEventListener('keydown', e => { if (e.key === 'Enter') entrar(); });
+</script>
+</body>
+</html>

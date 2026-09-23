@@ -1,0 +1,14 @@
+Mina: Mina do Sossego (Vale, cobre, Canaã dos Carajás-PA) lon -50.0790 lat -6.4325
+Fonte: MapBiomas (sintético p/ dev; trocar pelo real via ROTEIRO_QGIS.md)
+Raio escolhido: 1km direto + 5km funcional + 10km controle porque: 1km mede impacto direto (cava/pilha/planta), 5km mede entorno funcional (vila Sossego, acessos, terceiros e pastagem de apoio) e 10km mede controle regional (fundo agropecuário de Canaã). Defesa: 1km = mina, 10km = região, 5km = entorno de verdade.
+Período: 2008 x 2015 x 2023 porque: 2008 pré-expansão (linha de base, mina nova), 2015 operação plena (mina consolidada + boom urbano de Canaã), 2023 retrato atual. MapBiomas permite tendência anual contínua e separa classe mineração (30) de pastagem (15); PRODES daria só incremento oficial, bom pra validar mas sem separação fina.
+
+1.1 ha buffer 1km 2008 / 2015 / 2023: 56.07 / 204.14 / 296.43 (sintético - AREA RECORTADA unica por ano, confinada 1km; trocar pelo QGIS via ROTEIRO_QGIS.md)
+1.2 ha buffer 5km 2008 / 2015 / 2023: 161.35 / 567.84 / 943.91 (sintético recortado)
+1.3 ha buffer 10km 2008 / 2015 / 2023: 329.03 / 1082.51 / 2271.71 (sintético)
+1.4 Classe dominante no 5km: pastagem (2957 ha total vs 575 ha mineração em área única recortada)
+1.5 % do buffer 5km desmatado em 2023: 12.10 % (943.91 / 7803.61)
+1.6 Relação plausível com mineração ou outro uso? (1 parágrafo): Há perda associada à mina no 1km (cava/pilha), mas o vetor dominante no 5km é pastagem ao longo de vicinais — agropecuária pesa mais que a mina no entorno. Defender 5km como entorno funcional e 1km como impacto direto.
+
+2.1 Testes passando: 19 / 19 (validado 2026-09-21 via python testes.py; inclui T16b aluno 403)
+2.2 EXPLAIN ANALYZE da consulta serie (tempo): 4.62 ms, usa buffer_geom_idx (Index Scan via desmate_geom_idx). Plano: Nested Loop + Index Scan geom && buffer (ver Documentacao_Sistema_Sossego.pdf:4)

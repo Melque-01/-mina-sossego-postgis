@@ -1,0 +1,37 @@
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Env / secrets
+.env
+.env.local
+*.env
+!.env.example
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs / backups
+*.log
+*.bak
+servidor.py.bak
+nohup.out
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# VM / local data
+*.sqlite
+*.db
